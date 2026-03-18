@@ -1,0 +1,5 @@
+result
+result-*
+sources.old.json
+.direnv
+.pre-commit-config.yaml

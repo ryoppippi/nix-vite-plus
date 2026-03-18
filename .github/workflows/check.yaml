@@ -1,0 +1,41 @@
+name: check
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  fmt-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: ./.github/actions/setup-nix
+        with:
+          cachix-auth-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Check Nix formatting
+        run: cd dev && nix fmt -- --fail-on-change
+      - name: Run git-hooks checks
+        run: cd dev && nix flake check -L
+
+  build-and-test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+      - uses: ./.github/actions/setup-nix
+        with:
+          cachix-auth-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Build package
+        run: nix build -L
+      - name: Check version
+        run: |
+          version=$(nix run . -- --version)
+          echo "Detected version: $version"
+          if ! echo "$version" | grep -E "[0-9]+\.[0-9]+\.[0-9]+"; then
+            echo "Error: Version output does not match expected format"
+            exit 1
+          fi
+          echo "Version check passed: $version"
