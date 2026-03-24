@@ -7,9 +7,6 @@
   nodejs,
   pnpm_10,
   pnpmConfigHook,
-  oxfmt,
-  oxlint,
-  tsgolint,
 }:
 let
   sourcesData = lib.importJSON ./sources.json;
@@ -66,12 +63,7 @@ stdenv.mkDerivation {
     cp -r node_modules $out/node_modules
 
     wrapProgram $out/bin/vp \
-      --prefix PATH : ${lib.makeBinPath [
-        nodejs
-        oxfmt
-        oxlint
-        tsgolint
-      ]}
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
 
     runHook postInstall
   '';
