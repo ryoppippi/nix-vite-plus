@@ -1,21 +1,21 @@
 {
-  "version": "0.1.13",
+  "version": "0.1.14",
   "platforms": {
     "x86_64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-0.1.13.tgz",
-      "hash": "sha512-aDL/45AccuzeY0DXku4eDWsD0i992sUhkvnq7LWrsRcxZnlt0w1J1Vnk9WiiVKJ+x7x1r9mrEaxO9Qrrz0mtlQ=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-0.1.14.tgz",
+      "hash": "sha512-6rCFSK/AQBPSC0bbSuw0xziGsh1eDFrdIal7Drzf6BTAwXoYOAlBgD8RJVMy4fJU3Pl4QeiVuLehNjYksglt4A=="
     },
     "aarch64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.1.13.tgz",
-      "hash": "sha512-5N51ziYaCRy8yOD3IboguBhMEA9wG3hSlWShh08WogLmb3Rx9sQd0QrUzZesCogpJCMHiG3iOv/+jeFG5tn41w=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.1.14.tgz",
+      "hash": "sha512-wbpF9JuAqkpI6Xl69z2wc+CDEW4muEnleJAYs06PgwpSsEPKF4gagouBK2eB2s5Q9Ecn2ZRyZMxPsqubejUmFg=="
     },
     "x86_64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-x64/-/vite-plus-cli-darwin-x64-0.1.13.tgz",
-      "hash": "sha512-zLAHSJniSYj4PzJEYkWSoSMqwQPqoWBXQ6TkM8PpypRG6+bC0COihRbpI+ZORV2ySxxLP4C/b3UdQJKnxC964w=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-x64/-/vite-plus-cli-darwin-x64-0.1.14.tgz",
+      "hash": "sha512-Q1t+WIrszI//ZwvehheFBqhPK8BSHZIj8QIz93WDRfhHZrmOZJdm529ogpbD78aF0NAKZi2wh6pRl3Jzmw2vIw=="
     },
     "aarch64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.1.13.tgz",
-      "hash": "sha512-8jPjl64ZoL5kQqCPqMWulIqheNtpR9APh339go0doLufmJVTBS1d4e7IBTyI3CaYuc8Oua0VQtrtgvd+f7cZHQ=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.1.14.tgz",
+      "hash": "sha512-Smd3o46MLMhUPx2ipnm1ugGnSLcBQBpSRViuRbFpeuDOYCAO16IQ5EagIUuqvuuQH2E7pOiyl+Ug5NKwKEav1A=="
     }
   }
 }
