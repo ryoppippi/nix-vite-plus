@@ -2,8 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  autoPatchelfHook,
-  zlib,
+  fetchPnpmDeps,
+  makeWrapper,
+  nodejs,
+  pnpm_10,
+  pnpmConfigHook,
 }:
 let
   sourcesData = lib.importJSON ./sources.json;
@@ -13,34 +16,68 @@ let
   source =
     sources.${stdenv.hostPlatform.system}
     or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  vpBinary = fetchurl {
+    inherit (source) url hash;
+  };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vite-plus";
   inherit version;
 
-  src = fetchurl {
-    inherit (source) url hash;
-  };
+  src = ./npm;
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
-
-  buildInputs = lib.optionals stdenv.isLinux [
-    stdenv.cc.cc.lib
-    zlib
+  nativeBuildInputs = [
+    makeWrapper
+    nodejs
+    pnpm_10
+    pnpmConfigHook
   ];
 
-  sourceRoot = ".";
+  pnpmDeps = fetchPnpmDeps {
+    pname = "vite-plus-pnpm-deps";
+    inherit version;
+    src = ./npm;
+    inherit (sourcesData) hash;
+    fetcherVersion = 3;
+  };
 
-  unpackPhase = ''
-    runHook preUnpack
-    tar xzf $src --strip-components=1
-    runHook postUnpack
+  buildPhase = ''
+    runHook preBuild
+    chmod -R u+w node_modules/vite-plus/dist/global
+    substituteInPlace node_modules/vite-plus/dist/global/create.js \
+      --replace-fail \
+        'else fs.copyFileSync(src, dest);' \
+        'else { fs.copyFileSync(src, dest); fs.chmodSync(dest, 0o644); }'
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 vp $out/bin/vp
+
+    mkdir -p $out/bin
+
+    tar xzf ${vpBinary} --strip-components=1 -C $out/bin
+    chmod 755 $out/bin/vp
+
+    rm -f node_modules/.pnpm-workspace-state-v1.json
+    find node_modules -name '.bin' -type d -exec rm -rf {} + 2>/dev/null || true
+    rm -f node_modules/.modules.yaml
+    mv node_modules $out/node_modules
+
+    wrapProgram $out/bin/vp \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
+
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    output=$($out/bin/vp --version 2>&1)
+    echo "$output" | grep -q "vp v${version}"
+    runHook postInstallCheck
   '';
 
   dontStrip = true;
