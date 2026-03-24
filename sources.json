@@ -1,5 +1,6 @@
 {
   "version": "0.1.13",
+  "npmDepsHash": "sha256-lZRJOU90QDjcvJwjNgSSh1v1MbUuv67Px5WqS3oWfXg=",
   "platforms": {
     "x86_64-linux": {
       "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-0.1.13.tgz",
