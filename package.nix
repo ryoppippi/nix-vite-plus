@@ -60,7 +60,10 @@ stdenv.mkDerivation {
     tar xzf ${vpBinary} --strip-components=1 -C $out/bin
     chmod 755 $out/bin/vp
 
-    cp -r node_modules $out/node_modules
+    rm -f node_modules/.pnpm-workspace-state-v1.json
+    find node_modules -name '.bin' -type d -exec rm -rf {} + 2>/dev/null || true
+    rm -f node_modules/.modules.yaml
+    mv node_modules $out/node_modules
 
     wrapProgram $out/bin/vp \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]}
