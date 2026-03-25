@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  autoPatchelfHook,
   fetchurl,
   fetchPnpmDeps,
   makeWrapper,
@@ -32,6 +33,12 @@ stdenv.mkDerivation {
     nodejs
     pnpm_10
     pnpmConfigHook
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    stdenv.cc.cc.lib
   ];
 
   pnpmDeps = fetchPnpmDeps {

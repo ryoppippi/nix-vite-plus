@@ -80,7 +80,7 @@ async function getPnpmDepsHash(): Promise<string> {
 	const nixExprPath = join(tmpDir, "default.nix");
 
 	const nixExpr = `
-    let pkgs = import <nixpkgs> {};
+    let pkgs = import (builtins.getFlake "nixpkgs") {};
     in pkgs.fetchPnpmDeps {
       pname = "vp-wrapper";
       version = "0";
