@@ -1,4 +1,4 @@
-# vp-overlay
+# nix-vite-plus
 
 i'm too lazy to manage all dependencies. just download binary and execute it.
 
@@ -7,7 +7,7 @@ i'm too lazy to manage all dependencies. just download binary and execute it.
 ## Run directly
 
 ```sh
-nix run github:ryoppippi/vp-overlay -- --help
+nix run github:ryoppippi/nix-vite-plus -- --help
 ```
 
 ## Add to your flake.nix
@@ -16,14 +16,14 @@ nix run github:ryoppippi/vp-overlay -- --help
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    vp-overlay.url = "github:ryoppippi/vp-overlay";
+    nix-vite-plus.url = "github:ryoppippi/nix-vite-plus";
   };
 
-  outputs = { nixpkgs, vp-overlay, ... }:
+  outputs = { nixpkgs, nix-vite-plus, ... }:
     let
       pkgs = import nixpkgs {
         system = "aarch64-darwin"; # change to your system
-        overlays = [ vp-overlay.overlays.default ];
+        overlays = [ nix-vite-plus.overlays.default ];
       };
     in
     {
