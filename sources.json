@@ -1,22 +1,22 @@
 {
-  "version": "0.1.14",
-  "hash": "sha256-6DyoIkZFkpJpkF/pluYFnGz9yE6hyPFZ+l12GygN1ME=",
+  "version": "0.1.15",
+  "hash": "sha256-h5PwPIoxAfyv++8aipb7T6LGdvhpgRs1iIwMpEo9fVM=",
   "platforms": {
     "x86_64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-0.1.14.tgz",
-      "hash": "sha512-6rCFSK/AQBPSC0bbSuw0xziGsh1eDFrdIal7Drzf6BTAwXoYOAlBgD8RJVMy4fJU3Pl4QeiVuLehNjYksglt4A=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-0.1.15.tgz",
+      "hash": "sha512-5P7bx9A4MB9guYwzfaKcVC/4eKOqEr1WdXoIaLA94xDay5oXGJ3WE4aghDiGMu+9b6xtcGlsu4DFkMCznfFRKQ=="
     },
     "aarch64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.1.14.tgz",
-      "hash": "sha512-wbpF9JuAqkpI6Xl69z2wc+CDEW4muEnleJAYs06PgwpSsEPKF4gagouBK2eB2s5Q9Ecn2ZRyZMxPsqubejUmFg=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.1.15.tgz",
+      "hash": "sha512-cfWt3UtF2sp2W7TX7uDVC6O69oPuG4HvDBlCJqgFou9X0s+R2/ei9ErwWjts+k5VMe+2Qi2WkA3W0tTrUuXq0g=="
     },
     "x86_64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-x64/-/vite-plus-cli-darwin-x64-0.1.14.tgz",
-      "hash": "sha512-Q1t+WIrszI//ZwvehheFBqhPK8BSHZIj8QIz93WDRfhHZrmOZJdm529ogpbD78aF0NAKZi2wh6pRl3Jzmw2vIw=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-x64/-/vite-plus-cli-darwin-x64-0.1.15.tgz",
+      "hash": "sha512-NKqLTxNrnpS7+C3VTF4HqLMZRBDYLpHcZplDv7DWspgoNJdzOeXQ0C9s1vLedptFZHmQw50vTiO9rKFm6k6Tdg=="
     },
     "aarch64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.1.14.tgz",
-      "hash": "sha512-Smd3o46MLMhUPx2ipnm1ugGnSLcBQBpSRViuRbFpeuDOYCAO16IQ5EagIUuqvuuQH2E7pOiyl+Ug5NKwKEav1A=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.1.15.tgz",
+      "hash": "sha512-jHHLb1jJ41pOCiR5w+Mz5N0vCdAL87B8hNqR98xqNFoeb3UEJ1+ZlPXviLfYpQ2Z1LL299c83cQZFNDfGHRpMg=="
     }
   }
 }
