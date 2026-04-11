@@ -51,8 +51,8 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    chmod -R u+w node_modules/vite-plus/dist/global
-    substituteInPlace node_modules/vite-plus/dist/global/create.js \
+    chmod -R u+w node_modules/vite-plus/dist/create
+    substituteInPlace node_modules/vite-plus/dist/create/bin.js \
       --replace-fail \
         'else fs.copyFileSync(src, dest);' \
         'else { fs.copyFileSync(src, dest); fs.chmodSync(dest, 0o644); }'
