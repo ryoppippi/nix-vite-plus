@@ -46,6 +46,7 @@
               deadnix.enable = true;
               statix.enable = true;
               typos.enable = true;
+              oxfmt.enable = true;
             };
           };
         in
@@ -57,6 +58,7 @@
                 deadnix.enable = true;
                 statix.enable = true;
               };
+package = pkgs.prek;
             };
           };
 
