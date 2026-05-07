@@ -92,6 +92,9 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/vp \
       --prefix PATH : ${lib.makeBinPath [ nodejs ]}
 
+    ln -s vp $out/bin/vpr
+    ln -s vp $out/bin/vpx
+
     runHook postInstall
   '';
 
