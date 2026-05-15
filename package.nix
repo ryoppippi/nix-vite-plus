@@ -82,7 +82,9 @@ stdenv.mkDerivation {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    output=$($out/bin/vp --version 2>&1)
+    tmpcheck=$(mktemp -d)
+    echo "${nodejs.version}" > "$tmpcheck/.node-version"
+    output=$(cd "$tmpcheck" && $out/bin/vp --version 2>&1)
     echo "$output" | grep -q "vp v${version}"
     runHook postInstallCheck
   '';
