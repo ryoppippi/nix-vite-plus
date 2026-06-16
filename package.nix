@@ -93,7 +93,7 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   passthru = {
-    updateScript = ./update.ts;
+    updateScript = ./update.nu;
   };
 
   meta = with lib; {
