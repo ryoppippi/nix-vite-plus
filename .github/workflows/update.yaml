@@ -1,7 +1,7 @@
 name: update-sources
 on:
   schedule:
-    - cron: '0 6 * * *'
+    - cron: "0 6 * * *"
   workflow_dispatch:
 jobs:
   update-sources:
@@ -14,13 +14,15 @@ jobs:
         with:
           cachix-auth-token: ${{ secrets.CACHIX_AUTH_TOKEN }}
       - run: ./update.ts
-      - run: 'git config user.email 41898282+github-actions[bot]@users.noreply.github.com'
-      - run: 'git config user.name github-actions[bot]'
-      - run: 'git add -A'
+      - name: Verify updated package
+        run: nix build -L
+      - run: "git config user.email 41898282+github-actions[bot]@users.noreply.github.com"
+      - run: "git config user.name github-actions[bot]"
+      - run: "git add -A"
       - name: Commit with version
         run: |
           if ! git diff --staged --quiet; then
             VERSION=$(jq -r '.version' sources.json)
             git commit -m "chore: update vite-plus to $VERSION"
           fi
-      - run: 'git push -u origin main'
+      - run: "git push -u origin main"

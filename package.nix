@@ -16,7 +16,7 @@ let
 
   source =
     sources.${stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   vpBinary = fetchurl {
     inherit (source) url hash;
@@ -33,7 +33,8 @@ stdenv.mkDerivation {
     nodejs
     pnpm_10
     pnpmConfigHook
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
