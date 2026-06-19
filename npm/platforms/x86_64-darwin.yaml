@@ -1,0 +1,5 @@
+supportedArchitectures:
+  os:
+    - darwin
+  cpu:
+    - x64

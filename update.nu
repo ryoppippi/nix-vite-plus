@@ -48,17 +48,26 @@ def update_pnpm_lockfile [version: string] {
   ^pnpm install --lockfile-only --dir $npm_dir
 }
 
-def get_pnpm_deps_hash []: nothing -> string {
+def get_pnpm_deps_hash [system: string]: nothing -> string {
   let npm_dir = root_dir | path join "npm"
+  let platform_config = $npm_dir | path join "platforms" $"($system).yaml"
   let root_dir_json = root_dir | to json
   let nix_expr = $"
     let
       flake = builtins.getFlake ($root_dir_json);
       pkgs = import flake.inputs.nixpkgs {};
+      npmDir = ($npm_dir);
+      platformConfig = ($platform_config);
+      npmSrc = pkgs.runCommand \"vp-wrapper-source-($system)\" {} ''
+        cp -r ${npmDir}/. \"$out/\"
+        chmod -R u+w \"$out\"
+        cp ${platformConfig} \"$out/pnpm-workspace.yaml\"
+        rm -rf \"$out/platforms\"
+      '';
     in pkgs.fetchPnpmDeps {
       pname = \"vp-wrapper\";
       version = \"0\";
-      src = ($npm_dir);
+      src = npmSrc;
       hash = \"\";
       fetcherVersion = 3;
     }
@@ -76,11 +85,10 @@ def get_pnpm_deps_hash []: nothing -> string {
   $hashes | first | get hash
 }
 
-def update_sources_json [version: string, hash: string, platforms_data: record] {
+def update_sources_json [version: string, platforms_data: record] {
   let sources_path = root_dir | path join "sources.json"
   let sources_data = {
     version: $version
-    hash: $hash
     platforms: $platforms_data
   }
 
@@ -113,10 +121,16 @@ def main [] {
   print "Updating pnpm lockfile..."
   update_pnpm_lockfile $latest_version
 
-  print "Computing pnpm deps hash..."
-  let pnpm_deps_hash = get_pnpm_deps_hash
-  print $"  pnpm deps hash: ($pnpm_deps_hash)"
+  print "Computing pnpm deps hashes..."
+  for platform in ($platforms | transpose nix_platform npm_suffix) {
+    let pnpm_deps_hash = get_pnpm_deps_hash $platform.nix_platform
+    $platforms_data = $platforms_data | update $platform.nix_platform {
+      ...($platforms_data | get $platform.nix_platform)
+      pnpmHash: $pnpm_deps_hash
+    }
+    print $"  ($platform.nix_platform): ($pnpm_deps_hash)"
+  }
 
-  update_sources_json $latest_version $pnpm_deps_hash $platforms_data
+  update_sources_json $latest_version $platforms_data
   print $"Updated vite-plus to version ($latest_version)"
 }

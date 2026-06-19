@@ -21,12 +21,28 @@ let
   vpBinary = fetchurl {
     inherit (source) url hash;
   };
+
+  npmSrc = stdenv.mkDerivation {
+    pname = "vite-plus-npm-source";
+    inherit version;
+    src = ./npm;
+    dontBuild = true;
+    dontFixup = true;
+    installPhase = ''
+      runHook preInstall
+      cp -r ./. "$out/"
+      chmod -R u+w "$out"
+      cp "platforms/${stdenv.hostPlatform.system}.yaml" "$out/pnpm-workspace.yaml"
+      rm -rf "$out/platforms"
+      runHook postInstall
+    '';
+  };
 in
 stdenv.mkDerivation {
   pname = "vite-plus";
   inherit version;
 
-  src = ./npm;
+  src = npmSrc;
 
   nativeBuildInputs = [
     makeWrapper
@@ -45,8 +61,8 @@ stdenv.mkDerivation {
   pnpmDeps = fetchPnpmDeps {
     pname = "vite-plus-pnpm-deps";
     inherit version;
-    src = ./npm;
-    inherit (sourcesData) hash;
+    src = npmSrc;
+    hash = source.pnpmHash;
     fetcherVersion = 3;
   };
 
