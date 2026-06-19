@@ -3,11 +3,9 @@
   stdenv,
   autoPatchelfHook,
   fetchurl,
-  fetchPnpmDeps,
+  importNpmLock,
   makeWrapper,
   nodejs,
-  pnpm_10,
-  pnpmConfigHook,
 }:
 let
   sourcesData = lib.importJSON ./sources.json;
@@ -22,33 +20,17 @@ let
     inherit (source) url hash;
   };
 
-  npmSrc = stdenv.mkDerivation {
-    pname = "vite-plus-npm-source";
-    inherit version;
-    src = ./npm;
-    dontBuild = true;
-    dontFixup = true;
-    installPhase = ''
-      runHook preInstall
-      cp -r ./. "$out/"
-      chmod -R u+w "$out"
-      cp "platforms/${stdenv.hostPlatform.system}.yaml" "$out/pnpm-workspace.yaml"
-      rm -rf "$out/platforms"
-      runHook postInstall
-    '';
-  };
 in
 stdenv.mkDerivation {
   pname = "vite-plus";
   inherit version;
 
-  src = npmSrc;
+  src = ./npm;
 
   nativeBuildInputs = [
+    importNpmLock.npmConfigHook
     makeWrapper
     nodejs
-    pnpm_10
-    pnpmConfigHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
@@ -58,12 +40,8 @@ stdenv.mkDerivation {
     stdenv.cc.cc.lib
   ];
 
-  pnpmDeps = fetchPnpmDeps {
-    pname = "vite-plus-pnpm-deps";
-    inherit version;
-    src = npmSrc;
-    hash = source.pnpmHash;
-    fetcherVersion = 3;
+  npmDeps = importNpmLock {
+    npmRoot = ./npm;
   };
 
   buildPhase = ''
@@ -84,9 +62,8 @@ stdenv.mkDerivation {
     tar xzf ${vpBinary} --strip-components=1 -C $out/bin
     chmod 755 $out/bin/vp
 
-    rm -f node_modules/.pnpm-workspace-state-v1.json
     find node_modules -name '.bin' -type d -exec rm -rf {} + 2>/dev/null || true
-    rm -f node_modules/.modules.yaml
+    rm -f node_modules/.package-lock.json
     mv node_modules $out/node_modules
 
     wrapProgram $out/bin/vp \
