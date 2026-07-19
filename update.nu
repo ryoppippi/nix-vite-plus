@@ -45,6 +45,10 @@ def update_npm_lockfile [version: string] {
   | $"($in)\n"
   | save --force $package_json_path
 
+  # Regenerate the lockfile from scratch: reconciling a stale lockfile against
+  # a new vite-plus version makes npm fail with ERESOLVE peer conflicts
+  rm --force ($npm_dir | path join "package-lock.json")
+
   ^npm install --package-lock-only --ignore-scripts --prefix $npm_dir
 }
 
