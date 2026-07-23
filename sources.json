@@ -1,21 +1,21 @@
 {
-  "version": "0.2.5",
+  "version": "0.2.6",
   "platforms": {
     "x86_64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-0.2.5.tgz",
-      "hash": "sha512-47oZxZTxySwr3EmCqyhk1ADIaeNCmCEIeAlD5eEJtE7v342AD3bm/ZgkBa5HJuoccDJBb/tPrE8IHXJ1j/kdAg=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-0.2.6.tgz",
+      "hash": "sha512-gDhfN7b/LDwOfoMaem6bnbm53K5m+hgVkWjnYnZsG1nFzJYpY6SUi3fU7bdc/91LGxtYEWXDrrEx2ykmp11CfQ=="
     },
     "aarch64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.2.5.tgz",
-      "hash": "sha512-vGht57QZccUa28XSpchiX+uH91lOY3VsJ7YyGtci/QS9nCkGCkJnvY+uOXd0P0iZIMTATmkenp7XmWHw0qvbcw=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.2.6.tgz",
+      "hash": "sha512-ocIMOpkRIUnVpaJOeIBu+JKTqGcHgvAVRyC4puD8OkuA78LN8n+ejhBOIqRQz4ehhdBOynL1xDSs/BncuvTiCg=="
     },
     "x86_64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-x64/-/vite-plus-cli-darwin-x64-0.2.5.tgz",
-      "hash": "sha512-x4x2FF2qHtGdSjSJfQlbbnCevcQRH8t9hVXoWH+rQ7Kts4u61cDIHx1aBoTVBJrO2Bb444Ira2SZBYK8IyY/bQ=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-x64/-/vite-plus-cli-darwin-x64-0.2.6.tgz",
+      "hash": "sha512-I73hwcVe+R80ouuZ0mm0jNi9OnQsOTcQYB60UbRe4qCckXpGHK0UvdGZMSUFbP2zZCqdeSMiiqoIjnttrAKVPw=="
     },
     "aarch64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.2.5.tgz",
-      "hash": "sha512-I2KIQa67EYJhDZS5VDdQuJ65P+9ldDalKqTp+XZ8Xmmz0FMEAYavVQdIBajH6ob1qlgXbwGTQy9G5DKOjsNcew=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.2.6.tgz",
+      "hash": "sha512-sjKfLAQS2oS2ycf2k6sXwaJ4oWFNSZymxLH7Dfd5zBCrz8eI4qCY6yBnBuME6o56uWMbfhjJLFog8Qd9z708mw=="
     }
   }
 }
