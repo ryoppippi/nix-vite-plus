@@ -1,5 +1,5 @@
 #!/usr/bin/env nix
-#! nix shell --inputs-from . nixpkgs#nushell nixpkgs#nodejs_24 -c nu
+#! nix shell --inputs-from . nixpkgs#nushell nixpkgs#bun bun2nix#bun2nix -c nu
 
 const npm_registry = "https://registry.npmjs.org"
 const platforms = {
@@ -13,9 +13,12 @@ def root-dir []: nothing -> string {
   $env.FILE_PWD
 }
 
-def update-npm-lockfile [version: string] {
-  let npm_dir = root-dir | path join "npm"
-  let package_json_path = $npm_dir | path join "package.json"
+def wrapper-dir []: nothing -> string {
+  root-dir | path join "wrapper"
+}
+
+def update-bun-lockfile [version: string] {
+  let package_json_path = wrapper-dir | path join "package.json"
   let package_json = {
     name: "vp-wrapper"
     version: $version
@@ -30,11 +33,18 @@ def update-npm-lockfile [version: string] {
   | $"($in)\n"
   | save --force $package_json_path
 
-  # Regenerate the lockfile from scratch: reconciling a stale lockfile against
-  # a new vite-plus version makes npm fail with ERESOLVE peer conflicts
-  rm --force ($npm_dir | path join "package-lock.json")
+  ^bun install --cwd (wrapper-dir) --lockfile-only --save-text-lockfile --ignore-scripts
+}
 
-  ^npm install --package-lock-only --ignore-scripts --prefix $npm_dir
+def update-bun-nix [] {
+  let bun_nix_path = wrapper-dir | path join "bun.nix"
+
+  ^bun2nix --lock-file (wrapper-dir | path join "bun.lock") --output-file $bun_nix_path
+
+  # bun2nix emits every fetcher it might need in the function head; deadnix
+  # drops the unused ones, without which the fmt check in CI fails
+  cd (root-dir | path join "dev")
+  ^nix fmt -- $bun_nix_path
 }
 
 def update-sources-json [version: string, platforms_data: record] {
@@ -72,8 +82,11 @@ def main [] {
   )
 
   print ""
-  print "Updating npm lockfile..."
-  update-npm-lockfile $latest_version
+  print "Updating bun lockfile..."
+  update-bun-lockfile $latest_version
+
+  print "Regenerating bun.nix..."
+  update-bun-nix
 
   update-sources-json $latest_version $platforms_data
   print $"Updated vite-plus to version ($latest_version)"

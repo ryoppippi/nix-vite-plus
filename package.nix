@@ -2,8 +2,8 @@
   lib,
   stdenv,
   autoPatchelfHook,
+  bun2nix,
   fetchurl,
-  importNpmLock,
   makeWrapper,
   nodejs,
 }:
@@ -25,24 +25,44 @@ stdenv.mkDerivation {
   pname = "vite-plus";
   inherit version;
 
-  src = ./npm;
+  src = ./wrapper;
 
   nativeBuildInputs = [
-    importNpmLock.npmConfigHook
+    bun2nix.hook
     makeWrapper
-    nodejs
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  # nodejs is a host dependency so that fixupPhase resolves the
+  # `#!/usr/bin/env node` shebangs shipped inside node_modules against it.
+  buildInputs = [
+    nodejs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     stdenv.cc.cc.lib
   ];
 
-  npmDeps = importNpmLock {
-    npmRoot = ./npm;
+  bunDeps = bun2nix.fetchBunDeps {
+    bunNix = ./wrapper/bun.nix;
+    # bun2nix rewrites every `#!/usr/bin/env node` shebang to a bun shim, which
+    # would both change the runtime under vp's helper scripts and pull bun into
+    # the closure. Leave them for our own fixupPhase to resolve to nodejs.
+    patchShebangs = false;
   };
+
+  # `node_modules` is moved into `$out` verbatim, so it must contain real files
+  # under a flat layout: the isolated linker would leave `$out/node_modules`
+  # entries pointing into `node_modules/.bun`, and the symlink backend (bun's
+  # default on darwin) would point them at the build-local cache copy, which
+  # is gone by the time `vp` runs.
+  bunInstallFlags = "--linker=hoisted --backend=copyfile";
+
+  dontRunLifecycleScripts = true;
+  dontUseBunBuild = true;
+  dontUseBunCheck = true;
+  dontUseBunInstall = true;
 
   buildPhase = ''
     runHook preBuild
@@ -51,6 +71,12 @@ stdenv.mkDerivation {
       --replace-fail \
         'else fs.copyFileSync(src, dest);' \
         'else { fs.copyFileSync(src, dest); fs.chmodSync(dest, 0o644); }'
+
+    # bun2nix marks every file it extracts executable, which makes fixupPhase
+    # rewrite the shebangs it finds. `vp create` copies templates/ into the
+    # user's new project, so a store path must never end up in there.
+    find node_modules/vite-plus/templates -type f -exec chmod a-x {} +
+
     runHook postBuild
   '';
 
@@ -63,7 +89,6 @@ stdenv.mkDerivation {
     chmod 755 $out/bin/vp
 
     find node_modules -name '.bin' -type d -exec rm -rf {} + 2>/dev/null || true
-    rm -f node_modules/.package-lock.json
     mv node_modules $out/node_modules
 
     wrapProgram $out/bin/vp \
