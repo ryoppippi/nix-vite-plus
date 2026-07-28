@@ -9,10 +9,6 @@
       "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-0.2.6.tgz",
       "hash": "sha512-ocIMOpkRIUnVpaJOeIBu+JKTqGcHgvAVRyC4puD8OkuA78LN8n+ejhBOIqRQz4ehhdBOynL1xDSs/BncuvTiCg=="
     },
-    "x86_64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-x64/-/vite-plus-cli-darwin-x64-0.2.6.tgz",
-      "hash": "sha512-I73hwcVe+R80ouuZ0mm0jNi9OnQsOTcQYB60UbRe4qCckXpGHK0UvdGZMSUFbP2zZCqdeSMiiqoIjnttrAKVPw=="
-    },
     "aarch64-darwin": {
       "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-0.2.6.tgz",
       "hash": "sha512-sjKfLAQS2oS2ycf2k6sXwaJ4oWFNSZymxLH7Dfd5zBCrz8eI4qCY6yBnBuME6o56uWMbfhjJLFog8Qd9z708mw=="

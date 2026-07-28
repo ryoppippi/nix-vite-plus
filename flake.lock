@@ -6,9 +6,7 @@
         "nixpkgs": [
           "nixpkgs"
         ],
-        "systems": [
-          "systems"
-        ],
+        "systems": "systems",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
@@ -65,21 +63,23 @@
     "root": {
       "inputs": {
         "bun2nix": "bun2nix",
-        "nixpkgs": "nixpkgs",
-        "systems": "systems"
+        "nixpkgs": "nixpkgs"
       }
     },
     "systems": {
-      "flake": false,
       "locked": {
-        "path": "./nix/systems.nix",
-        "type": "path"
+        "lastModified": 1776166891,
+        "narHash": "sha256-bI8yrEGjrohR5hkQox7UrxDH7XqrYMwI8SL/LrJ1+S8=",
+        "owner": "nix-systems",
+        "repo": "triplet",
+        "rev": "6de7bc09397911ce03636afbcf6118745ab2cda0",
+        "type": "github"
       },
       "original": {
-        "path": "./nix/systems.nix",
-        "type": "path"
-      },
-      "parent": []
+        "owner": "nix-systems",
+        "repo": "triplet",
+        "type": "github"
+      }
     },
     "treefmt-nix": {
       "inputs": {
