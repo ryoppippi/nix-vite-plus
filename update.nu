@@ -17,9 +17,16 @@ def wrapper-dir []: nothing -> string {
   root-dir | path join "wrapper"
 }
 
+# `save` writes exactly what it is given, so re-add the trailing newline every
+# other tool in the repo expects of a text file
+def save-json [path: path]: record -> nothing {
+  to json --indent 2
+  | $"($in)\n"
+  | save --force $path
+}
+
 def update-bun-lockfile [version: string] {
-  let package_json_path = wrapper-dir | path join "package.json"
-  let package_json = {
+  {
     name: "vp-wrapper"
     version: $version
     private: true
@@ -27,11 +34,7 @@ def update-bun-lockfile [version: string] {
       "vite-plus": $version
     }
   }
-
-  $package_json
-  | to json --indent 2
-  | $"($in)\n"
-  | save --force $package_json_path
+  | save-json (wrapper-dir | path join "package.json")
 
   ^bun install --cwd (wrapper-dir) --lockfile-only --save-text-lockfile --ignore-scripts
 }
@@ -48,38 +51,29 @@ def update-bun-nix [] {
 }
 
 def update-sources-json [version: string, platforms_data: record] {
-  let sources_path = root-dir | path join "sources.json"
-  let sources_data = {
+  {
     version: $version
     platforms: $platforms_data
   }
-
-  $sources_data
-  | to json --indent 2
-  | $"($in)\n"
-  | save --force $sources_path
+  | save-json (root-dir | path join "sources.json")
 }
 
 def main [] {
-  let current_version = (open (root-dir | path join "sources.json") | get version)
-  let latest_version = (http get $"($npm_registry)/vite-plus/latest" | get version)
+  let current_version = open (root-dir | path join "sources.json") | get version
+  let latest_version = http get $"($npm_registry)/vite-plus/latest" | get version
 
   print $"Current version: ($current_version)"
   print $"Latest version: ($latest_version)"
   print $"Updating vite-plus from ($current_version) to ($latest_version)"
 
-  let platforms_data = (
-    $platforms
+  let platforms_data = $platforms
     | items {|nix_platform, npm_suffix|
-      let dist = (
-        http get $"($npm_registry)/@voidzero-dev/vite-plus-cli-($npm_suffix)/($latest_version)"
+      let dist = http get $"($npm_registry)/@voidzero-dev/vite-plus-cli-($npm_suffix)/($latest_version)"
         | get dist
-      )
       print $"  ($nix_platform): ($dist.integrity)"
       {$nix_platform: {url: $dist.tarball, hash: $dist.integrity}}
     }
-    | reduce -f {} {|it, acc| $acc | merge $it}
-  )
+    | into record
 
   print ""
   print "Updating bun lockfile..."
