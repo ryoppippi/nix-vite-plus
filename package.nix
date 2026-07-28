@@ -77,6 +77,12 @@ stdenv.mkDerivation {
     # user's new project, so a store path must never end up in there.
     find node_modules/vite-plus/templates -type f -exec chmod a-x {} +
 
+    # bun.lock records no `libc` field, so bun cannot do npm's musl/glibc
+    # filtering and installs both builds of every native package. The musl ones
+    # can never load on our glibc targets, and autoPatchelf fails outright on
+    # the dynamically linked ones (lightningcss-linux-x64-musl).
+    find node_modules -type d -name '*-musl*' -exec rm -rf {} +
+
     runHook postBuild
   '';
 
