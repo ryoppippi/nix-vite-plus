@@ -1,5 +1,5 @@
 #!/usr/bin/env nix
-#! nix shell --inputs-from . nixpkgs#nushell nixpkgs#nodejs_24 -c nu
+#! nix shell --inputs-from . nixpkgs#nushell nixpkgs#bun bun2nix#bun2nix -c nu
 
 const npm_registry = "https://registry.npmjs.org"
 const platforms = {
@@ -13,10 +13,20 @@ def root-dir []: nothing -> string {
   $env.FILE_PWD
 }
 
-def update-npm-lockfile [version: string] {
-  let npm_dir = root-dir | path join "npm"
-  let package_json_path = $npm_dir | path join "package.json"
-  let package_json = {
+def wrapper-dir []: nothing -> string {
+  root-dir | path join "wrapper"
+}
+
+# `save` writes exactly what it is given, so re-add the trailing newline every
+# other tool in the repo expects of a text file
+def save-json [path: path]: record -> nothing {
+  to json --indent 2
+  | $"($in)\n"
+  | save --force $path
+}
+
+def update-bun-lockfile [version: string] {
+  {
     name: "vp-wrapper"
     version: $version
     private: true
@@ -24,56 +34,53 @@ def update-npm-lockfile [version: string] {
       "vite-plus": $version
     }
   }
+  | save-json (wrapper-dir | path join "package.json")
 
-  $package_json
-  | to json --indent 2
-  | $"($in)\n"
-  | save --force $package_json_path
+  ^bun install --cwd (wrapper-dir) --lockfile-only --save-text-lockfile --ignore-scripts
+}
 
-  # Regenerate the lockfile from scratch: reconciling a stale lockfile against
-  # a new vite-plus version makes npm fail with ERESOLVE peer conflicts
-  rm --force ($npm_dir | path join "package-lock.json")
+def update-bun-nix [] {
+  let bun_nix_path = wrapper-dir | path join "bun.nix"
 
-  ^npm install --package-lock-only --ignore-scripts --prefix $npm_dir
+  ^bun2nix --lock-file (wrapper-dir | path join "bun.lock") --output-file $bun_nix_path
+
+  # bun2nix emits every fetcher it might need in the function head; deadnix
+  # drops the unused ones, without which the fmt check in CI fails
+  cd (root-dir | path join "dev")
+  ^nix fmt -- $bun_nix_path
 }
 
 def update-sources-json [version: string, platforms_data: record] {
-  let sources_path = root-dir | path join "sources.json"
-  let sources_data = {
+  {
     version: $version
     platforms: $platforms_data
   }
-
-  $sources_data
-  | to json --indent 2
-  | $"($in)\n"
-  | save --force $sources_path
+  | save-json (root-dir | path join "sources.json")
 }
 
 def main [] {
-  let current_version = (open (root-dir | path join "sources.json") | get version)
-  let latest_version = (http get $"($npm_registry)/vite-plus/latest" | get version)
+  let current_version = open (root-dir | path join "sources.json") | get version
+  let latest_version = http get $"($npm_registry)/vite-plus/latest" | get version
 
   print $"Current version: ($current_version)"
   print $"Latest version: ($latest_version)"
   print $"Updating vite-plus from ($current_version) to ($latest_version)"
 
-  let platforms_data = (
-    $platforms
+  let platforms_data = $platforms
     | items {|nix_platform, npm_suffix|
-      let dist = (
-        http get $"($npm_registry)/@voidzero-dev/vite-plus-cli-($npm_suffix)/($latest_version)"
+      let dist = http get $"($npm_registry)/@voidzero-dev/vite-plus-cli-($npm_suffix)/($latest_version)"
         | get dist
-      )
       print $"  ($nix_platform): ($dist.integrity)"
       {$nix_platform: {url: $dist.tarball, hash: $dist.integrity}}
     }
-    | reduce -f {} {|it, acc| $acc | merge $it}
-  )
+    | into record
 
   print ""
-  print "Updating npm lockfile..."
-  update-npm-lockfile $latest_version
+  print "Updating bun lockfile..."
+  update-bun-lockfile $latest_version
+
+  print "Regenerating bun.nix..."
+  update-bun-nix
 
   update-sources-json $latest_version $platforms_data
   print $"Updated vite-plus to version ($latest_version)"
