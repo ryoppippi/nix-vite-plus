@@ -5,7 +5,6 @@ const npm_registry = "https://registry.npmjs.org"
 const platforms = {
   "x86_64-linux": "linux-x64-gnu"
   "aarch64-linux": "linux-arm64-gnu"
-  "x86_64-darwin": "darwin-x64"
   "aarch64-darwin": "darwin-arm64"
 }
 

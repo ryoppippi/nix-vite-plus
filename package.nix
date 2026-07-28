@@ -130,12 +130,7 @@ stdenv.mkDerivation {
     license = licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "vp";
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
-    maintainers = [ ];
+    platforms = import ./nix/systems.nix;
+    maintainers = with maintainers; [ ryoppippi ];
   };
 }
