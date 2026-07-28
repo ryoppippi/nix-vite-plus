@@ -131,6 +131,6 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "vp";
     platforms = import ./nix/systems.nix;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ryoppippi ];
   };
 }
