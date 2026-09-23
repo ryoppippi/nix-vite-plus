@@ -31,10 +31,10 @@
     "prepublishOnly": "vp run build"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0",
-    "@typescript/native-preview": "7.0.0-dev.20260316.1",
-    "bumpp": "^11.0.1",
+    "@types/node": "^25.9.8",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "bumpp": "^11.1.0",
     "typescript": "^5.9.3",
-    "vite-plus": "^0.1.11"
+    "vite-plus": "^0.3.3"
   }
 }
