@@ -1,8 +1,8 @@
 {
   "name": "vp-wrapper",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "vite-plus": "1.0.0-rc.1"
+    "vite-plus": "1.0.0"
   }
 }

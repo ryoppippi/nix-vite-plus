@@ -1,17 +1,17 @@
 {
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0",
   "platforms": {
     "x86_64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-1.0.0-rc.1.tgz",
-      "hash": "sha512-473Tu8GZ3YAlmb8hI5aD7qVpdK2kaR26aICs5n6jhimgPV7WXvLE4FAHlY6Go0MJSPl09PqbeiRpxkPmNjV21g=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-1.0.0.tgz",
+      "hash": "sha512-XaHl5ogLEx8fwYXsLegDN+rLDdOsCdF2RvGe8xwW06/7PSh2V1BAgKZtW+cN1GAqo24/FqU4nzXF4/tmo3gwAw=="
     },
     "aarch64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-1.0.0-rc.1.tgz",
-      "hash": "sha512-hb0Gy8IcTVFGcN1bsLoXXqWubjOqEGhAHzsB3weUFpRzQq1dDUE5UXnbUhxs+NRN8EDkkeaMQUk1wb/rPLVcFw=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-1.0.0.tgz",
+      "hash": "sha512-tkxg/YSwU5g+cQTlBt+u9/BPFwSmp/Zh5CWqYBE/2q8K9z6OA7AAHLx1OBfVyaiv4dU0sg2Z9RNsQNoBqywx7Q=="
     },
     "aarch64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-1.0.0-rc.1.tgz",
-      "hash": "sha512-qxifxT7uT/GGKNrGmnKFkDIcWqokQQlQhKATgR+QLUxRYJzaS0m2LQEOFWpd25uS4rz6qxWc0EOA6SLnHASmLA=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-1.0.0.tgz",
+      "hash": "sha512-ZHzd0169th7+GCEwWjJX5r8qsFMnuU8TRuYcdjIxzkmqsuhjK9o4jdJ2dXpPZcylhyE4SVO/HE+ljRmkZruKmg=="
     }
   }
 }
