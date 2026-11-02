@@ -2,10 +2,12 @@
   lib,
   stdenv,
   autoPatchelfHook,
-  bun2nix,
+  fetchPnpmDeps,
   fetchurl,
   makeWrapper,
   nodejs,
+  pnpm_10,
+  pnpmConfigHook,
 }:
 let
   sourcesData = lib.importJSON ./sources.json;
@@ -28,7 +30,8 @@ stdenv.mkDerivation {
   src = ./wrapper;
 
   nativeBuildInputs = [
-    bun2nix.hook
+    pnpm_10
+    pnpmConfigHook
     makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -44,25 +47,16 @@ stdenv.mkDerivation {
     stdenv.cc.cc.lib
   ];
 
-  bunDeps = bun2nix.fetchBunDeps {
-    bunNix = ./wrapper/bun.nix;
-    # bun2nix rewrites every `#!/usr/bin/env node` shebang to a bun shim, which
-    # would both change the runtime under vp's helper scripts and pull bun into
-    # the closure. Leave them for our own fixupPhase to resolve to nodejs.
-    patchShebangs = false;
+  # The JS side of vp, installed from wrapper/pnpm-lock.yaml. wrapper/pnpm-workspace.yaml
+  # makes it a flat tree of real files, since installPhase moves it into $out as is.
+  pnpmDeps = fetchPnpmDeps {
+    pname = "vite-plus-wrapper";
+    inherit version;
+    src = ./wrapper;
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = sourcesData.pnpmDepsHash;
   };
-
-  # `node_modules` is moved into `$out` verbatim, so it must contain real files
-  # under a flat layout: the isolated linker would leave `$out/node_modules`
-  # entries pointing into `node_modules/.bun`, and the symlink backend (bun's
-  # default on darwin) would point them at the build-local cache copy, which
-  # is gone by the time `vp` runs.
-  bunInstallFlags = "--linker=hoisted --backend=copyfile";
-
-  dontRunLifecycleScripts = true;
-  dontUseBunBuild = true;
-  dontUseBunCheck = true;
-  dontUseBunInstall = true;
 
   buildPhase = ''
     runHook preBuild
@@ -72,16 +66,14 @@ stdenv.mkDerivation {
         'else fs.copyFileSync(src, dest);' \
         'else { fs.copyFileSync(src, dest); fs.chmodSync(dest, 0o644); }'
 
-    # bun2nix marks every file it extracts executable, which makes fixupPhase
-    # rewrite the shebangs it finds. `vp create` copies templates/ into the
-    # user's new project, so a store path must never end up in there.
-    find node_modules/vite-plus/templates -type f -exec chmod a-x {} +
-
-    # bun.lock records no `libc` field, so bun cannot do npm's musl/glibc
-    # filtering and installs both builds of every native package. The musl ones
-    # can never load on our glibc targets, and autoPatchelf fails outright on
-    # the dynamically linked ones (lightningcss-linux-x64-musl).
-    find node_modules -type d -name '*-musl*' -exec rm -rf {} +
+    # The npm tarball ships templates/generator/bin/index.ts executable, so
+    # pnpmConfigHook's patchShebangs already pointed its `#!/usr/bin/env node`
+    # at the build's Node. `vp create` copies templates/ into the user's new
+    # project, where a store path must never appear: restore the shebang and
+    # drop the exec bit so fixupPhase leaves it alone too.
+    find node_modules/vite-plus/templates -type f -perm -u+x \
+      -exec sed -i -E '1s|^#!/nix/store/[^/]+/bin/node$|#!/usr/bin/env node|' {} + \
+      -exec chmod a-x {} +
 
     runHook postBuild
   '';
