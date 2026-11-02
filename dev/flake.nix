@@ -39,7 +39,11 @@
         }:
         {
           treefmt = {
-            projectRootFile = ".git/config";
+            # treefmt's own detection asks git for the top level. The default,
+            # `.git/config`, only exists in the main checkout: from a linked
+            # worktree, where `.git` is a file, it resolved to the main checkout
+            # and formatted that tree instead of the one treefmt ran in.
+            projectRootFile = null;
             programs = {
               nixfmt.enable = true;
               deadnix.enable = true;
