@@ -95,6 +95,13 @@ stdenv.mkDerivation {
     ln -s vp $out/bin/vpr
     ln -s vp $out/bin/vpx
 
+    # Without this marker beside the binary, the first run of vp treats the
+    # store path as a fresh standalone download and installs itself globally:
+    # shims under ~/.local/share/vite-plus pointing back into this store path
+    # and PATH entries in every shell profile. They dangle once the path is
+    # garbage-collected and break shell startup.
+    touch $out/bin/.vp-setup-complete
+
     runHook postInstall
   '';
 
