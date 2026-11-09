@@ -1,0 +1,41 @@
+name: autofix.ci
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autofix-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-nix
+
+      - name: Sync sources.json with wrapper/package.json
+        run: ./update.nu sync
+
+      - name: Format
+        # Unfixable errors are reported by the check workflow; this job only pushes what can be fixed.
+        continue-on-error: true
+        run: cd dev && nix fmt
+
+      - name: Drop changes under .github
+        # autofix.ci rejects the entire fix if it contains a .github path.
+        run: git restore --worktree -- .github
+
+      - name: Push fixes with autofix.ci
+        uses: autofix-ci/action@c5b2d67aa2274e7b5a18224e8171550871fc7e4a # v1.3.4
+        with:
+          fail-fast: false
+          commit-message: "chore: autofix"
