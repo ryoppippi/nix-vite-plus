@@ -1,18 +1,18 @@
 {
-  "version": "1.5.0",
-  "pnpmDepsHash": "sha256-ro0dEwGzd0KDbryF1S1QKa0mwDngu6tMVSmNw/b+mZo=",
+  "version": "1.6.0",
+  "pnpmDepsHash": "sha256-zlzq0eNSi+V/kUq1FZ+xU7FdkFlKY8tm5Np+Qmy0ix0=",
   "platforms": {
     "x86_64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-1.5.0.tgz",
-      "hash": "sha512-kGc0K8Su3ffwr/0GJpm7iWeaQUMADp24SrU4LMeRD9bTLQe8jMKByePhsd8nIbsFm9gBvzPihuVnDrvA5Y6DaA=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-x64-gnu/-/vite-plus-cli-linux-x64-gnu-1.6.0.tgz",
+      "hash": "sha512-+KUK9FP/Hw2dyMVbbyRNHTlun925/vRoyknep31LoPBK7XZnXw6EP4tvZ1thvuQ7yhrtlBGjvRhZ7A7Ho1FQfA=="
     },
     "aarch64-linux": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-1.5.0.tgz",
-      "hash": "sha512-r55wciZmo7q3g/vapSq/KneEfSzcuLhVTsT7K0zK6UKIS0pnTAakGgjVFXr8C8PoMLNDfeVjolYIJIU719EDIA=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-linux-arm64-gnu/-/vite-plus-cli-linux-arm64-gnu-1.6.0.tgz",
+      "hash": "sha512-dEDJzcsn1zvjQv65r70KzLlQ/jv8eZYxi1m2tCsUBRa1RRJBL83HhVSCsoDSYG8+4QzTCPEYehzQOmAohRG4sw=="
     },
     "aarch64-darwin": {
-      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-1.5.0.tgz",
-      "hash": "sha512-Wu09gZhhyioXne2fvasY9Fe1jTrlcJkT6E2Dmi0Pfxux3HMjzfMBVLsB2rL50meWtdd/9Bk5xhWgvT2vqOYhKw=="
+      "url": "https://registry.npmjs.org/@voidzero-dev/vite-plus-cli-darwin-arm64/-/vite-plus-cli-darwin-arm64-1.6.0.tgz",
+      "hash": "sha512-WgLqIfxkBvEVMIA4Zl1cDFHU95NqXDjF8iXyWxmH5d84X00QbocC+L1gggWSmTn4SG20GNvuux0/a3pS+IwzKw=="
     }
   }
 }
